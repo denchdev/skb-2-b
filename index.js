@@ -3,21 +3,29 @@ var app = express();
 var cors = require('cors');
 app.use(cors());
 
-function getShortName(fullname) {
-  var template = /([a-zA-Z]+)(\s+)?([a-zA-Z]+)?(\s+)?([a-zA-Z]+)?(\s+)?([a-zA-Z]+)?(\s*)?/;
+function getShortName(fullname) { 
+  var template = /([a-zA-Zа-яА-Яó]+)(\s+)?([a-zA-Zа-яА-Яó]+)?(\s+)?([a-zA-Zа-яА-Яó]+)?(\s+)?([a-zA-Zа-яА-Яó]+)?(\s*)?/;
+
   var shortNameTemplate = fullname.match(template);
-  var shortName = shortNameTemplate[1];
-  if(shortNameTemplate[3]) {
-	shortName = shortName + ' ' + shortNameTemplate[3][0] + '.';
+  var shortName;
+  if(!fullname) {
+    shortName = 'Invalid fullname';
   }
-  if(shortNameTemplate[5]) {
-	shortName = shortName + ' ' + shortNameTemplate[5][0] + '.';
-  }  
-  if(shortNameTemplate[7]) {
-    return 'Invalid fullname';
+  else if(shortNameTemplate[7] || !fullname) {
+    shortName = 'Invalid fullname';
+  }
+  else if(shortNameTemplate[5]) {
+	shortName = shortNameTemplate[5] + ' ' + shortNameTemplate[1][0] + '. ' + shortNameTemplate[3][0] + '.' ;
+  } 
+  else if(shortNameTemplate[3]) {
+	shortName = shortNameTemplate[3] + ' ' + shortNameTemplate[1][0] + '.' ;
   } else {
-    return shortName;
+   shortName = shortNameTemplate[1];
   }
+   
+  
+  return shortName;
+  
 }
 
 app.get('/', function (req, res) { 
