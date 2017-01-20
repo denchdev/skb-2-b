@@ -3,8 +3,16 @@ var app = express();
 var cors = require('cors');
 app.use(cors());
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.toLowerCase().slice(1);
+}
+
+
 function getShortName(fullname) { 
-  var template = /([a-zA-Zа-яА-Яó]+)(\s+)?([a-zA-Zа-яА-Яó]+)?(\s+)?([a-zA-Zа-яА-Яó]+)?(\s+)?([a-zA-Zа-яА-Яó]+)?(\s*)?/;
+  if(fullname.match(/\d|_|-|\//)) {
+    return 'Invalid fullname';
+  }
+  var template = /([a-zA-Zа-яА-Яó]+)([\s']+)?([a-zA-Zа-яА-Яó]+)?([\s']+)?([a-zA-Zа-яА-Яó]+)?([\s']+)?([a-zA-Zа-яА-Яó]+)?([\s']*)?/;
 
   var shortNameTemplate = fullname.match(template);
   var shortName;
@@ -15,12 +23,12 @@ function getShortName(fullname) {
     shortName = 'Invalid fullname';
   }
   else if(shortNameTemplate[5]) {
-	shortName = shortNameTemplate[5] + ' ' + shortNameTemplate[1][0] + '. ' + shortNameTemplate[3][0] + '.' ;
+	shortName = capitalizeFirstLetter(shortNameTemplate[5]) + ' ' + capitalizeFirstLetter(shortNameTemplate[1][0]) + '. ' + capitalizeFirstLetter(shortNameTemplate[3][0]) + '.' ;
   } 
   else if(shortNameTemplate[3]) {
-	shortName = shortNameTemplate[3] + ' ' + shortNameTemplate[1][0] + '.' ;
+	shortName = capitalizeFirstLetter(shortNameTemplate[3]) + ' ' + capitalizeFirstLetter(shortNameTemplate[1][0]) + '.' ;
   } else {
-   shortName = shortNameTemplate[1];
+   shortName = capitalizeFirstLetter(shortNameTemplate[1]);
   }
    
   
